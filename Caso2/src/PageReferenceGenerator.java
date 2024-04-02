@@ -1,6 +1,15 @@
 public class PageReferenceGenerator {
-    public PageReferenceGenerator(){
+    private int[][] mat1;
+    private int[][] mat2;
+    private int[][] mat3;
+    private int pageSize;
+    private int matrixRows;
+    private int matrixCols;
 
+    public PageReferenceGenerator(int pageSize, int matrixRows, int matrixCols){
+        this.pageSize = pageSize;
+        this.matrixCols = matrixCols;
+        this.matrixRows = matrixRows;
     }
 
     public void Filter(){
