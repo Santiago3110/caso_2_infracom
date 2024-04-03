@@ -15,7 +15,7 @@ public class PageReferenceGenerator {
     private int matrixCols;
     private int filterSize = 3; // Tamaño del filtro (3x3)
     private int numPages;
-    private int total;
+    private int numReferences;
     private List<String> references; // Lista para almacenar las referencias
 
     public PageReferenceGenerator(int pageSize, int matrixSize){
@@ -91,8 +91,7 @@ public class PageReferenceGenerator {
             generateReference(mat3, 0, i, "W");
             generateReference(mat3, matrixRows - 1, i, "W");
         }
-        System.out.println(numPages);
-        System.out.println(total);
+        System.out.println("El documento con las referencias fue generado exitosamente.");
     }
 
     private void generateReference(int[][] matrix, int row, int col, String operation) {
@@ -119,9 +118,9 @@ public class PageReferenceGenerator {
         int pageNum = offset / pageSize;
         int offsetInPage = offset % pageSize;
     
-        String reference = String.format("%s[%d][%d], %d, %d, %s", getMatrixName(matrix), row, col, pageNum, offsetInPage, operation);
+        String reference = String.format("%s[%d][%d],%d,%d,%s",getMatrixName(matrix), row, col, pageNum, offsetInPage, operation);
         references.add(reference);
-        total+=1;
+        numReferences+=1;
     }
 
     
@@ -137,5 +136,13 @@ public class PageReferenceGenerator {
 
     public List<String> getReferences() {
         return references;
+    }
+
+    public int getNumReferences() {
+        return numReferences;
+    }
+
+    public int getNumPages() {
+        return numPages;
     }
 }
