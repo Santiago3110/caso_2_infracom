@@ -22,7 +22,8 @@ public class App {
             switch (option) {
                 case "1":
                     System.out.println("Seleccionó la opción 1");
-                    // Agrega aquí la lógica para la opción 1
+                    PageReferenceGenerator generator = new PageReferenceGenerator(16, 4);
+                    generator.filter();
                     break;
                 case "2":
                     System.out.println("Seleccionó la opción 2");

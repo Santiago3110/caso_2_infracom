@@ -10,6 +10,7 @@ public class PageReferenceGenerator {
     private int matrixCols;
     private int filterSize = 3; // Tamaño del filtro (3x3)
     private int numPages;
+    private int total;
     private List<String> references; // Lista para almacenar las referencias
 
     public PageReferenceGenerator(int pageSize, int matrixSize){
@@ -30,9 +31,9 @@ public class PageReferenceGenerator {
         references = new ArrayList<>();
     }
 
-    public void Filter(){
+    public void filter(){
         for(int i = 1; i < matrixRows - 1; i++){
-            for(int j = 0; j < matrixCols - 1; j++){
+            for(int j = 1; j < matrixCols - 1; j++){
                 int acum = 0;
                 for(int a = -1; a <= 1; a++){
                     for(int b = -1; b <= 1; b++){
@@ -41,6 +42,10 @@ public class PageReferenceGenerator {
                         int i3 = 1 + a;
                         int j3 = 1 + b;
                         acum += (mat2[i3][j3]*mat1[i2][j2]);
+
+                        // Generar referencias de lectura para el filtro y la matriz de datos
+                        generateReference(mat1, i2, j2, "R");
+                        generateReference(mat2, i3, j3, "R");
                     }
                 }
                 if(acum >= 0 && acum <= 255){
@@ -50,15 +55,69 @@ public class PageReferenceGenerator {
                 } else {
                     mat3[i][j] = 255;
                 }
+
+                generateReference(mat3, i, j, "W");
             }
         }
         for(int i = 0; i < matrixCols; i++){
             mat3[0][i] = 0;
             mat3[matrixRows-1][i] = 255;
+
+            generateReference(mat3, 0, i, "W");
+            generateReference(mat3, matrixRows - 1, i, "W");
         }
         for(int i=1; i < matrixRows; i++){
             mat3[i][0] = 0;
             mat3[i][matrixCols-1] = 255;
+
+            generateReference(mat3, 0, i, "W");
+            generateReference(mat3, matrixRows - 1, i, "W");
         }
+        System.out.println(numPages);
+        System.out.println(total);
+    }
+
+    private void generateReference(int[][] matrix, int row, int col, String operation) {
+        int matrixOffset;
+        int matCol;
+
+        if (matrix == mat1) 
+        { 
+            matrixOffset = filterSize * filterSize * 4;
+            matCol = matrixCols;
+        } 
+        else if (matrix == mat2) 
+        { 
+            matrixOffset = 0;
+            matCol = 3;
+        } 
+        else 
+        {
+            matrixOffset = (filterSize * filterSize * 4) + (matrixRows * matrixCols * 4);
+            matCol = matrixCols;
+        }
+
+        int offset = matrixOffset + (row * matCol + col) * 4;
+        int pageNum = offset / pageSize;
+        int offsetInPage = offset % pageSize;
+    
+        String reference = String.format("%s[%d][%d], %d, %d, %s", getMatrixName(matrix), row, col, pageNum, offsetInPage, operation);
+        references.add(reference);
+        total+=1;
+    }
+
+    
+    private String getMatrixName(int[][] matrix) {
+        if (matrix == mat1) {
+            return "M"; // Matriz de datos
+        } else if (matrix == mat2) {
+            return "F"; // Filtro
+        } else {
+            return "R"; // Matriz resultante
+        }
+    }
+
+    public List<String> getReferences() {
+        return references;
     }
 }
