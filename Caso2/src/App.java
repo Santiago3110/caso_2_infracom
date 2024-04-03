@@ -34,7 +34,7 @@ public class App {
                     PageReferenceGenerator generator = new PageReferenceGenerator(pageSizeParameter, matrixSizeParameter);
                     generator.filter();
                     references = generator.getReferences();
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter("Opcion1.txt"))) {
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter("referencias.txt"))) {
                         writer.write("TP=" + pageSizeParameter);
                         writer.newLine();
                         writer.write("NF=" + matrixSizeParameter);
