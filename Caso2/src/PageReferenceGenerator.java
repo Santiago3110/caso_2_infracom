@@ -88,8 +88,8 @@ public class PageReferenceGenerator {
             mat3[i][0] = 0;
             mat3[i][matrixCols-1] = 255;
 
-            generateReference(mat3, 0, i, "W");
-            generateReference(mat3, matrixRows - 1, i, "W");
+            generateReference(mat3, i, 0, "W");
+            generateReference(mat3, i, matrixCols - 1, "W");
         }
         System.out.println("El documento con las referencias fue generado exitosamente.");
     }
