@@ -1,10 +1,15 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PageReferenceGenerator {
     private int[][] mat1;
-    private int[][] mat2;
+    private int[][] mat2 ={{0, -1, 0},
+                           {-1, 5, -1},
+                           {0, -1, 0}};
     private int[][] mat3;
+    private int mat1Offset;
+    private int mat3Offset;
     private int pageSize;
     private int matrixRows;
     private int matrixCols;
@@ -24,11 +29,24 @@ public class PageReferenceGenerator {
 
         // Inicializar las matrices2026
         mat1 = new int[matrixRows][matrixCols];
-        mat2 = new int[filterSize][filterSize];
         mat3 = new int[matrixRows][matrixCols];
+
+        //calculo de los offsets
+        mat1Offset =  filterSize * filterSize * 4;
+        mat3Offset =  (filterSize * filterSize * 4) + (matrixRows * matrixCols * 4);
 
         // Inicializar la lista de referencias
         references = new ArrayList<>();
+
+        Random rand = new Random();
+        for(int i = 0; i<matrixSize;i++)
+        {
+            for(int j=0;j<matrixSize;j++)
+            {
+                int numeroAleatorio = rand.nextInt(256);
+                mat1[i][j] = numeroAleatorio;
+            }
+        }
     }
 
     public void filter(){
@@ -70,8 +88,8 @@ public class PageReferenceGenerator {
             mat3[i][0] = 0;
             mat3[i][matrixCols-1] = 255;
 
-            generateReference(mat3, 0, i, "W");
-            generateReference(mat3, matrixRows - 1, i, "W");
+            generateReference(mat3, i, 0, "W");
+            generateReference(mat3, i, matrixCols - 1, "W");
         }
         System.out.println("El documento con las referencias fue generado exitosamente.");
     }
@@ -82,7 +100,7 @@ public class PageReferenceGenerator {
 
         if (matrix == mat1) 
         { 
-            matrixOffset = filterSize * filterSize * 4;
+            matrixOffset = mat1Offset;
             matCol = matrixCols;
         } 
         else if (matrix == mat2) 
@@ -92,7 +110,7 @@ public class PageReferenceGenerator {
         } 
         else 
         {
-            matrixOffset = (filterSize * filterSize * 4) + (matrixRows * matrixCols * 4);
+            matrixOffset = mat3Offset;
             matCol = matrixCols;
         }
 
