@@ -22,7 +22,7 @@ public class PageReferenceGenerator {
         int totalSize = (matrixRows * matrixCols + filterSize * filterSize + matrixRows * matrixCols) * 4; // 4 bytes por entero
         this.numPages = (int) Math.ceil((double) totalSize / pageSize);
 
-        // Inicializar las matrices
+        // Inicializar las matrices2026
         mat1 = new int[matrixRows][matrixCols];
         mat2 = new int[filterSize][filterSize];
         mat3 = new int[matrixRows][matrixCols];
