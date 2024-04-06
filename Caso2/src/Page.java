@@ -7,6 +7,14 @@ public class Page {
         this.r_bit = false;
     }
 
+    public synchronized boolean getRBit() {
+        return r_bit;
+    }
+
+    public synchronized void setRBit(boolean r_bit) {
+        this.r_bit = r_bit;
+    }
+
     @Override
     public String toString() {
         return "reference: " + reference;

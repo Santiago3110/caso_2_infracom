@@ -6,19 +6,23 @@ public class SimulationThread extends Thread {
     }
 
     public void flush() {
-        try {
-            Thread.sleep(4);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        for (Page page : memoryManager.getPhysicalMemory()) {
-            page.r_bit = false;
+        synchronized (memoryManager){
+            for (Page page : memoryManager.getPhysicalMemory()) {
+                page.setRBit(false);
+            }
         }
     }
-    
+
     @Override
     public void run() {
-        flush();
+        while (!memoryManager.all_processed) {
+            try {
+                Thread.sleep(4);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Flush");
+            flush();
+        }
     }
 }

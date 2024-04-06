@@ -1,14 +1,17 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class App {
     private static List<String> references;
     private static String matrixSize;
     private static String pageSize;
-
 
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
@@ -31,7 +34,8 @@ public class App {
                     matrixSize = scanner.nextLine();
                     int pageSizeParameter = Integer.parseInt(pageSize);
                     int matrixSizeParameter = Integer.parseInt(matrixSize);
-                    PageReferenceGenerator generator = new PageReferenceGenerator(pageSizeParameter, matrixSizeParameter);
+                    PageReferenceGenerator generator = new PageReferenceGenerator(pageSizeParameter,
+                            matrixSizeParameter);
                     generator.filter();
                     references = generator.getReferences();
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter("referencias.txt"))) {
@@ -58,6 +62,42 @@ public class App {
 
                 case "2":
                     System.out.println("Seleccionó la opción 2");
+                    System.out.println("Ingrese el numero de marcos de pagina");
+                    int numFrames = Integer.parseInt(scanner.nextLine());
+                    System.out.println("Ingrese el nombre del archivo de referencias");
+                    String fileName = scanner.nextLine();
+                    // Read the file
+                    BufferedReader reader = new BufferedReader(new FileReader(fileName));
+                    reader.readLine();
+                    reader.readLine();
+                    reader.readLine();
+                    reader.readLine();
+                    String nr = reader.readLine().split("=")[1];
+                    int[] calls = new int[Integer.parseInt(nr)];
+                    Map<Integer, Page> pages = new HashMap<Integer, Page>();
+                    System.out.println(reader.readLine());
+                    for (int i = 0; i < Integer.parseInt(nr); i++) {
+                        String[] line = reader.readLine().split(",");
+                        int reference = Integer.parseInt(line[1]);
+                        calls[i] = reference;
+                        Page page = new Page(reference);
+                        pages.put(reference, page);
+                    }
+                    reader.close();
+                    MemoryManager memoryManager = new MemoryManager(numFrames, pages, calls);
+
+                    System.out.println("Physical" + memoryManager.getPhysicalMemory());
+                    System.out.println("Swap" + memoryManager.getSwapMemory());
+                    System.out.println("Physical table" + memoryManager.getPageTable());
+                    System.out.println("Swap" + memoryManager.getSwapTable());
+                    System.out.println("Hits: " + memoryManager.getNumHits());
+                    System.out.println("Misses: " + memoryManager.getNumMisses());
+                    System.out.println("Hits %: "
+                            + (memoryManager.getNumHits()
+                                    / (double) (memoryManager.getNumHits() + memoryManager.getNumMisses())));
+                    System.out.println("Misses %: " + (memoryManager.getNumMisses()
+                            / (double) (memoryManager.getNumHits() + memoryManager.getNumMisses())));
+                    System.out.println("Total: " + (memoryManager.getNumHits() + memoryManager.getNumMisses()));
                     break;
                 case "3":
                     System.out.println("Saliendo del programa...");
