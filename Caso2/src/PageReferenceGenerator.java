@@ -84,7 +84,7 @@ public class PageReferenceGenerator {
             generateReference(mat3, 0, i, "W");
             generateReference(mat3, matrixRows - 1, i, "W");
         }
-        for(int i=1; i < matrixRows; i++){
+        for(int i=1; i < matrixRows-1; i++){
             mat3[i][0] = 0;
             mat3[i][matrixCols-1] = 255;
 
