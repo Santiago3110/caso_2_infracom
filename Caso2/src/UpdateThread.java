@@ -49,22 +49,25 @@ public class UpdateThread extends Thread {
                 Page page = physicalMemory.get(pageTable.get(reference));
                 page.setRBit(true);
                 memoryManager.setNumHits(memoryManager.getNumHits() + 1);
-                return;
-            }
-            memoryManager.setNumMisses(memoryManager.getNumMisses() + 1);
-            int page_swap = swapTable.get(reference);
-            Page swap_data = swapMemory.get(page_swap);
-            int page_pm = find_free_frame();
-            if (page_pm == -1) {
-                int page_to_replace_index = find_replace_frame();
-                int page_swap_index = swapTable.get(reference);
-                swap(page_to_replace_index, page_swap_index);
+                System.out.println("Hit number: " + memoryManager.getNumHits());
+
             } else {
-                swapMemory.remove(page_swap);
-                swapTable.remove(reference);
-                physicalMemory.add(page_pm, swap_data);
-                pageTable.put(reference, page_pm);
-                swap_data.setRBit(true);
+                memoryManager.setNumMisses(memoryManager.getNumMisses() + 1);
+                System.out.println("Miss number: " + memoryManager.getNumMisses());
+                int page_swap = swapTable.get(reference);
+                Page swap_data = swapMemory.get(page_swap);
+                int page_pm = find_free_frame();
+                if (page_pm == -1) {
+                    int page_to_replace_index = find_replace_frame();
+                    int page_swap_index = swapTable.get(reference);
+                    swap(page_to_replace_index, page_swap_index);
+                } else {
+                    swapMemory.remove(page_swap);
+                    swapTable.remove(reference);
+                    physicalMemory.add(page_pm, swap_data);
+                    pageTable.put(reference, page_pm);
+                    swap_data.setRBit(true);
+                }
             }
         }
     }
@@ -74,7 +77,6 @@ public class UpdateThread extends Thread {
         synchronized (memoryManager) {
             swapMemory.add(page);
             swapTable.put(reference, swapMemory.size() - 1);
-            load(reference);
         }
     }
 
@@ -103,7 +105,6 @@ public class UpdateThread extends Thread {
         }
     }
 
-    
     private int find_replace_frame() {
         synchronized (memoryManager) {
             for (int i = 0; i < physicalMemory.size(); i++) {
