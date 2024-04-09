@@ -75,6 +75,7 @@ public class App {
                     String nr = reader.readLine().split("=")[1];
                     int[] calls = new int[Integer.parseInt(nr)];
                     Map<Integer, Page> pages = new HashMap<Integer, Page>();
+                    reader.readLine();
                     for (int i = 0; i < Integer.parseInt(nr); i++) {
                         String[] line = reader.readLine().split(",");
                         int reference = Integer.parseInt(line[1]);
