@@ -49,11 +49,9 @@ public class UpdateThread extends Thread {
                 Page page = physicalMemory.get(pageTable.get(reference));
                 page.setRBit(true);
                 memoryManager.setNumHits(memoryManager.getNumHits() + 1);
-                System.out.println("Hit number: " + memoryManager.getNumHits());
 
             } else {
                 memoryManager.setNumMisses(memoryManager.getNumMisses() + 1);
-                System.out.println("Miss number: " + memoryManager.getNumMisses());
                 int page_swap = swapTable.get(reference);
                 Page swap_data = swapMemory.get(page_swap);
                 int page_pm = find_free_frame();
