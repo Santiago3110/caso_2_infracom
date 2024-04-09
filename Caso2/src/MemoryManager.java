@@ -98,5 +98,4 @@ public class MemoryManager {
     public int getMAX_PHYSICAL_MEMORY_SIZE() {
         return MAX_PHYSICAL_MEMORY_SIZE;
     }
-
 }

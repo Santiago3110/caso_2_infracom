@@ -103,6 +103,7 @@ public class UpdateThread extends Thread {
         }
     }
 
+    
     private int find_replace_frame() {
         synchronized (memoryManager) {
             for (int i = 0; i < physicalMemory.size(); i++) {

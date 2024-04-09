@@ -13,6 +13,7 @@ public class SimulationThread extends Thread {
         }
     }
 
+    
     @Override
     public void run() {
         while (!memoryManager.all_processed) {
