@@ -33,7 +33,6 @@ public class UpdateThread extends Thread {
 
     @Override
     public void run() {
-        System.out.println("Loaded reference: " + reference + " T:" + this.getId());
         if (!is_page)
             load(reference);
         else {
